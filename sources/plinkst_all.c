@@ -45,12 +45,28 @@ void plinkst_print(linkst_t **list, void (*function)(void *))
     }
 }
 
-//void linkst_array_from_list(linkst_t **list, void *(*function)(void *))
-//{
-//    linkst_t *cur = list[0];
-//
-//    for (; cur != NULL; cur = cur->next) {
-//        function(cur->data);
-//    }
-//    return function(list);
-//}
+void **plinkst_to_array(linkst_t **list)
+{
+    linkst_t *cur = list[0];
+    unsigned int len = plinkst_len(list);
+    void **array_data = malloc(sizeof(void *) * (len + 1));
+    
+    array_data[len] = NULL;
+    for (int i = 0; cur != NULL; cur = cur->next , i++) {
+        array_data[i] = cur->data;
+    }
+    return array_data;
+}
+
+void **plinkst_to_array_function(linkst_t **list, void *(*function)(void *))
+{
+    linkst_t *cur = list[0];
+    unsigned int len = plinkst_len(list);
+    void **array_data = malloc(sizeof(void *) * (len + 1));
+
+    array_data[len] = NULL;
+    for (int i = 0; cur != NULL; cur = cur->next , i++) {
+        array_data[i] = function(cur->data);
+    }
+    return array_data;
+}
